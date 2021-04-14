@@ -5,4 +5,8 @@ mongoose.connect('mongodb://localhost:27017/seabattle', {
     useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: true
+}).then(() => {
+    console.log("DB connected");
+}).catch(() => {
+    console.log("DB error");
 });

@@ -4,7 +4,9 @@ export interface IGame extends Document{
     userA: string,
     userB: string,
     status: string,
-    joinToken: string
+    joinToken: string,
+    readyUsers: Array<String>,
+    currentRoundUser: string
 }
 
 const GameSchema = new Schema({
@@ -19,6 +21,12 @@ const GameSchema = new Schema({
     },
     joinToken: {
         type: Schema.Types.String
+    },
+    readyUsers: {
+        type: Schema.Types.Array
+    },
+    currentRoundUser: {
+        type: Schema.Types.Array
     }
 }, {
     timestamps: true

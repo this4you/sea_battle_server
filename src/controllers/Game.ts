@@ -36,7 +36,7 @@ class GameController {
         const joinToken: string = req.body.joinToken;
         const game: IGame | null = await GameModel.findOneAndUpdate(
             {joinToken: joinToken},
-            {userB: userB, status: "config", joinToken: ""});
+            {userB: userB, status: "config", joinToken: "", currentRoundUser: userB});
         if (game == null) {
             return res.status(200).json({
                 status: "not found"

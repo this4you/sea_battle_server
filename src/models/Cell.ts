@@ -5,7 +5,10 @@ export interface ICell extends Document{
     x: number,
     y: number,
     shipId: string,
-    isShip: true,
+    isShip: boolean,
+    isWounded: boolean,
+    isKilled: boolean,
+    isMissed: boolean,
     game: IGame | string;
 }
 
@@ -17,9 +20,18 @@ const CellSchema = new Schema({
         type: Schema.Types.Number
     },
     shipId: {
-        type: Schema.Types.Number
+        type: Schema.Types.String
     },
     isShip: {
+        type: Schema.Types.Boolean
+    },
+    isWounded: {
+        type: Schema.Types.Boolean
+    },
+    isMissed: {
+        type: Schema.Types.Boolean
+    },
+    isKilled: {
         type: Schema.Types.Boolean
     },
     game: {
