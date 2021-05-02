@@ -26,7 +26,7 @@ const GameSchema = new Schema({
         type: Schema.Types.Array
     },
     currentRoundUser: {
-        type: Schema.Types.Array
+        type: Schema.Types.String
     }
 }, {
     timestamps: true

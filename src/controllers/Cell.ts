@@ -2,8 +2,16 @@ import express from 'express';
 import {CellModel, GameModel} from "../models";
 import Cell, {ICell} from "../models/Cell";
 import {IGame} from "../models/Game";
+import socket from "socket.io";
 
 class CellController {
+
+    io: socket.Server;
+
+    constructor(io: socket.Server) {
+        this.io = io;
+    }
+
     index = async (req: express.Request, res: express.Response) => {
         try {
             const cells: Array<ICell> = await CellModel.find({game: req.gameId, user: req.userId})
@@ -59,21 +67,23 @@ class CellController {
                         }
                         res.status(200).json({
                             status: "killed",
-                            shipId: cell.shipId
+                            cells: [...woundedShipCells, cell]
                         });
                     } else {
                         cell.isWounded = true;
                         await cell.save();
                         res.status(200).json({
                             status: "wounded",
-                            cellId: cell._id
+                            cell: cell
                         });
                     }
                 } else if (cell) {
                     cell.isMissed = true;
                     await cell.save();
+                    await this._changeRoundUser(req.gameId, req.userId);
                     res.status(200).json({
-                        status: "missed"
+                        status: "missed",
+                        cell: cell
                     });
                 }
             } else {
@@ -89,6 +99,13 @@ class CellController {
                     status: "error",
                     message: "server error"
                 })
+        }
+    }
+    _changeRoundUser = async function (gameId: string, userId: string) {
+        const game: IGame | null = await GameModel.findById(gameId);
+        if (game !== null) {
+            game.currentRoundUser =  userId === game.userA ? game.userB : game.userA;
+            await game.save();
         }
     }
 
